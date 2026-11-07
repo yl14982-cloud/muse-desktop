@@ -4,7 +4,7 @@ Public release files are hosted in **GitHub Releases**. Friends do not need Acti
 
 1. Commit the new version, source, tests, documentation and release notes at `docs/releases/v<version>.md`.
 2. Wait for the corresponding **Build Windows installers** run to pass, including the packaged Windows UI tests.
-3. Run **Publish friend-testing preview** on `main`. Enter that successful build's numeric run ID and exact 40-character commit SHA.
+3. Pin that successful build's numeric run ID and exact 40-character source commit in `publish-preview.yml`, then run **Publish friend-testing preview** on `main`. For v0.6.0, the verified build is `42340695728` and source is `5c7a5b4a3f2cdc9698930abf74f6365136af5a7c`.
 4. The workflow checks the build status, workflow path, exact commit and package version, downloads the tested executable artifact, validates the two filenames, generates checksums and publishes a pre-release. It does not rebuild, sign or alter the binaries.
 
 If GitHub rejects automatic tag / release creation, a maintainer can create a **pre-release** in the UI with the exact tested commit as the tag target and the prepared release notes, leaving the assets empty. Run the publisher again. It only attaches files if the existing release is a published pre-release with the exact matching commit and no existing assets. It never overwrites previously published binaries.

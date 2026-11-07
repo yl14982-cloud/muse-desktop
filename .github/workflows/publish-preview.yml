@@ -1,15 +1,6 @@
 name: Publish friend-testing preview
 on:
   workflow_dispatch:
-    inputs:
-      build_run_id:
-        description: Successful Windows build run ID
-        required: true
-        type: string
-      source_sha:
-        description: Exact 40-character source commit of that build
-        required: true
-        type: string
 permissions:
   contents: read
 concurrency:
@@ -26,8 +17,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      BUILD_RUN_ID: ${{ inputs.build_run_id }}
-      SOURCE_SHA: ${{ inputs.source_sha }}
+      BUILD_RUN_ID: '42340695728'
+      SOURCE_SHA: 5c7a5b4a3f2cdc9698930abf74f6365136af5a7c
     steps:
       - uses: actions/checkout@v5
         with:
@@ -51,7 +42,7 @@ jobs:
         with:
           name: Muse-Desktop-Windows-unsigned
           path: release-assets
-          run-id: ${{ inputs.build_run_id }}
+          run-id: ${{ env.BUILD_RUN_ID }}
           github-token: ${{ github.token }}
       - name: Validate release files and create checksums
         shell: bash
