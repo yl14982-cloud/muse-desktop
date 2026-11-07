@@ -1,8 +1,12 @@
 # Manual integration acceptance test
 
-## Current status: assistant write verified; desktop readback pending
+## Current status: creator task route observed end to end
 
-For v0.6.0, local task and simulated-sync tests accompany the packaged Windows UI checks. A live assistant write and independent readback of a temporary test mood succeeded in the creator's Notion workspace. The desktop still displayed its cached state and reported incomplete Notion configuration, so that observation did not pass desktop synchronization. Those tests do not establish that a real conversation, document, Notion workspace and desktop installation work together. A mood label visible on the desktop alone is not proof of this full chain.
+On 2026-11-07, an authorized assistant created the harmless task `Muse sync test — from ChatGPT` in the creator's Notion Tasks data source. An independent read confirmed its title and Ready status. The user then supplied a Windows desktop photo showing that exact task in All Tasks and selected in Today. This verifies the conversation → Notion → Muse task route in the creator's configured installation, with manual Today selection.
+
+A separate assistant update set the state to `Focused`; the desktop photos show the matching label. This is supporting evidence for mood sync; the photo alone cannot exclude a manual mood selection. Automatic refresh timing, a friend's independent setup, and document-to-Notion automation were not verified. The installed version and Windows build were not independently captured during this live test.
+
+After confirmation, the temporary task was marked Done and the pre-test state properties were restored. The restored historical mood is not a new assessment of the user's current state.
 
 ## What the implementation actually reads
 
@@ -24,11 +28,11 @@ The local bearer-token bridge is a separate development route. A bridge update d
 
 | Stage | Action | Expected result | Status |
 | --- | --- | --- | --- |
-| A: Live Notion read | Add `Try Muse` manually, set State `Mood` to `Calm`, then **Sync now**. | All Tasks shows the task; the cat shows Calm. | Pending manual test |
+| A: Live Notion read | Add `Try Muse` manually, set State `Mood` to `Calm`, then **Sync now**. | All Tasks shows the task; the cat shows Calm. | Equivalent assistant-created task observed in All Tasks and Today; exact Calm/manual-entry scenario not run |
 | B: Local task flow | Select the test task; run, pause and reset its clock. | Local session time is saved; Notion is unchanged. | Automated packaged test passed; live Notion-backed case pending |
-| C: Live mood refresh | Change the same row to `Focused`, set `Observed At`, then Sync now or wait about 90 seconds. | The cat changes to Focused. | Pending manual test |
-| D: Authorized assistant write | In a conversation, explicitly authorize a neutral test update to the dedicated State row. Confirm the write succeeded in Notion. | Correct row and structured properties updated. | Assistant write and readback passed in creator workspace; desktop read pending |
-| E: Full conversation route | Confirm the assistant's agreed state is saved in Notion, then check Muse. If a document is part of the plan, independently verify the document-to-Notion writer exists and ran. | Muse matches the saved Notion mood. A document-only change must not be counted as success. | Pending manual test |
+| C: Live mood refresh | Change the same row to `Focused`, set `Observed At`, then Sync now or wait about 90 seconds. | The cat changes to Focused. | Matching Focused label observed; manual-source exclusion and timed refresh not verified |
+| D: Authorized assistant write | In a conversation, explicitly authorize a neutral test update to the dedicated State row. Confirm the write succeeded in Notion. | Correct row and structured properties updated. | Assistant task/state writes and readback passed; exact task observed on desktop |
+| E: Full conversation route | Confirm the assistant's agreed state is saved in Notion, then check Muse. If a document is part of the plan, independently verify the document-to-Notion writer exists and ran. | Muse matches the saved Notion mood. A document-only change must not be counted as success. | Direct task route passed in creator installation; mood match observed; document route not tested |
 | F: Friend setup | Repeat A–C with a friend's own workspace and integration. | No creator credentials or workspace access needed. | Pending manual test |
 
 Stop at the first failing stage and identify which connection failed. Do not mark later stages as passed on the basis of mocks or a screenshot.
