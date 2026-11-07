@@ -1,0 +1,22 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+dist/
+build/
+*.exe
+*.msi
+**/bridge-token.txt
+**/muse-state.json
+**/muse-focus.json
+**/muse-settings.json
+
+# Local connection credentials and signing material
+**/notion-connection.json
+*.pem
+*.key
+*.pfx
+*.p12

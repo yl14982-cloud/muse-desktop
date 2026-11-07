@@ -1,0 +1,21 @@
+const {contextBridge,ipcRenderer}=require('electron');
+contextBridge.exposeInMainWorld('MuseDesktop',{
+  getState:()=>ipcRenderer.invoke('muse:get-state'),
+  getFocus:()=>ipcRenderer.invoke('muse:get-focus'),
+  focusAction:(action,payload)=>ipcRenderer.invoke('muse:focus-action',action,payload),
+  onFocus:cb=>ipcRenderer.on('muse:focus',(_,focus)=>cb(focus)),
+  getSync:()=>ipcRenderer.invoke('muse:get-sync'),
+  getConnection:()=>ipcRenderer.invoke('muse:get-connection'),
+  saveConnection:(data)=>ipcRenderer.invoke('muse:save-connection',data),
+  forgetConnection:()=>ipcRenderer.invoke('muse:forget-connection'),
+  syncNow:()=>ipcRenderer.invoke('muse:sync-now'),
+  chooseTasks:ids=>ipcRenderer.invoke('muse:choose-tasks',ids),
+  onSync:cb=>ipcRenderer.on('muse:sync',(_,value)=>cb(value)),
+  expand:flag=>ipcRenderer.invoke('muse:expand',flag),
+  toggleTask:id=>ipcRenderer.invoke('muse:toggle-task',id),
+  hide:()=>ipcRenderer.invoke('muse:hide'),
+  tokenPath:()=>ipcRenderer.invoke('muse:token-path'),
+  close:()=>ipcRenderer.invoke('muse:close'),
+  onState:callback=>ipcRenderer.on('muse:state',(_,state)=>callback(state)),
+  onExpanded:callback=>ipcRenderer.on('muse:expanded',(_,flag)=>callback(flag))
+});

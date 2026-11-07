@@ -1,0 +1,32 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Muse Desktop</title><link rel="stylesheet" href="style.css"/></head><body>
+<div class="shell">
+  <section class="mini" id="mini" role="button" tabindex="0" aria-label="Expand Muse">
+    <div class="drag" title="Drag to move Muse">⋮⋮</div>
+    <div class="catbox"><div id="miniCat"></div><div class="mood" id="miniMood">A bit tired</div></div>
+    <div class="line"></div>
+    <div class="brief"><div class="smallhead">TODAY'S TASKS <span id="taskCount">✦ 2</span><span class="clock-now" id="clockNow">--:--</span><span class="timer-inline" id="miniTimer" title="50-minute focus clock">◷ 50:00</span></div><div id="briefTasks"></div></div>
+    <button id="hide" class="hide" title="Hide to system tray" aria-label="Hide Muse">–</button>
+  </section>
+  <section class="panel" id="panel" hidden>
+    <div class="panelhead"><div class="brand">✧ Muse</div><button class="close" id="collapse" aria-label="Collapse panel">×</button></div>
+    <div class="subtitle" id="date"></div>
+    <div class="status"><div id="bigCat"></div><div><strong id="bigMood">A bit tired</strong><p id="caption">Rest is allowed.</p></div></div>
+    <div class="section-title" id="todayTitle">Today's Tasks (2)</div><div id="detailTasks"></div><div class="focus-panel">
+      <div class="focus-line"><strong>Focus · 50 min</strong><strong id="timerText">50:00</strong></div>
+      <div class="focus-line"><span id="focusTask">Choose a task clock to start</span><span id="focusMode">Idle</span></div>
+      <div class="focus-controls"><button id="focusToggle">▶ Start</button><button id="focusReset">↺ Reset</button></div>
+      <div class="focus-footer"><span id="focusToday" class="focus-total">Focused today: 0 min</span><button id="focusDetailsToggle" class="focus-details-toggle" aria-expanded="false" aria-controls="focusDetails">Session notes <span id="focusDetailsChevron">⌄</span></button></div>
+      <div id="focusDetails" class="focus-details" hidden>
+        <label class="focus-label">Goal for this session (optional)<input id="focusGoal" maxlength="500" placeholder="e.g. Solve one problem without notes"/></label>
+        <label class="focus-label">Check-in / progress<input id="focusFeedback" maxlength="800" placeholder="A quick note, if helpful"/></label>
+        <button class="focus-small" id="saveFeedback">+ Save check-in</button>
+        <label class="focus-label">Review & outcomes<textarea id="focusOutcome" maxlength="2000" rows="2" placeholder="What did you complete, verify, or learn?"></textarea></label>
+        <button class="focus-small" id="saveOutcome">Save review</button>
+        <p class="info">Paused time is not counted. Reset saves elapsed focus time and starts a fresh cycle. Session records stay on this device and do not mark Notion tasks as completed.</p>
+      </div>
+    </div>
+    <div class="menu" id="menu"><button data-page="tasks">▦　All Tasks <span>›</span></button><button data-page="projects">◈　Projects <span>›</span></button><button data-page="progress">▥　Progress <span>›</span></button><button data-page="settings">⚙　Settings <span>›</span></button></div>
+    <section id="sub" hidden><button class="back" id="back">‹ Back</button><h3 id="subTitle"></h3><div id="subBody"></div></section>
+    <div class="foot">One small step at a time ♡</div>
+  </section>
+</div><script src="renderer.js"></script></body></html>
