@@ -22,3 +22,6 @@ build/
 *.p12
 
 smoke-proofs/
+
+**/muse-tasks.json
+**/muse-tasks.json.tmp

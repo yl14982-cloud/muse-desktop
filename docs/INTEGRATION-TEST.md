@@ -1,8 +1,8 @@
 # Manual integration acceptance test
 
-## Current status: NOT YET VALIDATED END TO END
+## Current status: assistant write verified; desktop readback pending
 
-Mocked adapter tests and the Windows packaged-app test passed for v0.5.5. Those tests do not establish that a real conversation, document, Notion workspace and desktop installation work together. A mood label visible on the desktop alone is not proof of this full chain.
+For v0.6.0, local task and simulated-sync tests accompany the packaged Windows UI checks. A live assistant write and independent readback of a temporary test mood succeeded in the creator's Notion workspace. The desktop still displayed its cached state and reported incomplete Notion configuration, so that observation did not pass desktop synchronization. Those tests do not establish that a real conversation, document, Notion workspace and desktop installation work together. A mood label visible on the desktop alone is not proof of this full chain.
 
 ## What the implementation actually reads
 
@@ -15,7 +15,7 @@ The local bearer-token bridge is a separate development route. A bridge update d
 
 ## Prerequisites
 
-- Installed Muse v0.5.5 on a tester's Windows computer.
+- Installed Muse v0.6.0 with optional sync enabled on a tester's Windows computer.
 - A dedicated test data source and State row matching [the schema](NOTION-SETUP.md).
 - A read-only integration for Muse; a separately authorized writer if testing assistant updates.
 - Only harmless sample tasks and neutral state text; no secrets in documents or public test evidence.
@@ -27,7 +27,7 @@ The local bearer-token bridge is a separate development route. A bridge update d
 | A: Live Notion read | Add `Try Muse` manually, set State `Mood` to `Calm`, then **Sync now**. | All Tasks shows the task; the cat shows Calm. | Pending manual test |
 | B: Local task flow | Select the test task; run, pause and reset its clock. | Local session time is saved; Notion is unchanged. | Automated packaged test passed; live Notion-backed case pending |
 | C: Live mood refresh | Change the same row to `Focused`, set `Observed At`, then Sync now or wait about 90 seconds. | The cat changes to Focused. | Pending manual test |
-| D: Authorized assistant write | In a conversation, explicitly authorize a neutral test update to the dedicated State row. Confirm the write succeeded in Notion. | Correct row and structured properties updated. | Pending manual test |
+| D: Authorized assistant write | In a conversation, explicitly authorize a neutral test update to the dedicated State row. Confirm the write succeeded in Notion. | Correct row and structured properties updated. | Assistant write and readback passed in creator workspace; desktop read pending |
 | E: Full conversation route | Confirm the assistant's agreed state is saved in Notion, then check Muse. If a document is part of the plan, independently verify the document-to-Notion writer exists and ran. | Muse matches the saved Notion mood. A document-only change must not be counted as success. | Pending manual test |
 | F: Friend setup | Repeat A–C with a friend's own workspace and integration. | No creator credentials or workspace access needed. | Pending manual test |
 

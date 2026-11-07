@@ -2,16 +2,16 @@
 <div class="shell">
   <section class="mini" id="mini" role="button" tabindex="0" aria-label="Expand Muse">
     <div class="drag" title="Drag to move Muse">⋮⋮</div>
-    <div class="catbox"><div id="miniCat"></div><div class="mood" id="miniMood">A bit tired</div></div>
+    <div class="catbox"><div id="miniCat"></div><button class="mood" id="miniMood" title="Choose your mood">Calm</button></div>
     <div class="line"></div>
-    <div class="brief"><div class="smallhead">TODAY'S TASKS <span id="taskCount">✦ 2</span><span class="clock-now" id="clockNow">--:--</span><span class="timer-inline" id="miniTimer" title="50-minute focus clock">◷ 50:00</span></div><div id="briefTasks"></div></div>
+    <div class="brief"><div class="smallhead">TODAY'S TASKS <span id="taskCount">✦ 0</span><span class="clock-now" id="clockNow">--:--</span><span class="timer-inline" id="miniTimer" title="50-minute focus clock">◷ 50:00</span></div><div id="briefTasks"></div></div>
     <button id="hide" class="hide" title="Hide to system tray" aria-label="Hide Muse">–</button>
   </section>
   <section class="panel" id="panel" hidden>
     <div class="panelhead"><div class="brand">✧ Muse</div><button class="close" id="collapse" aria-label="Collapse panel">×</button></div>
-    <div class="subtitle" id="date"></div>
-    <div class="status"><div id="bigCat"></div><div><strong id="bigMood">A bit tired</strong><p id="caption">Rest is allowed.</p></div></div>
-    <div class="section-title" id="todayTitle">Today's Tasks (2)</div><div id="detailTasks"></div><div class="focus-panel">
+    <div class="subtitle" id="date"></div><div id="modeLabel" class="mode-label">Local mode · No account needed</div><p id="appMessage" class="app-message" role="alert" aria-live="polite"></p>
+    <div class="status"><div id="bigCat"></div><div><strong id="bigMood">Calm</strong><p id="caption">Feeling steady · Take your time</p><label class="mood-control">My mood <select id="moodSelect" aria-label="Choose your mood"><option>Focused</option><option selected>Calm</option><option>A bit tired</option><option>Low energy</option><option>Stressed</option></select></label><small id="moodHelp"></small></div></div>
+    <div class="section-title" id="todayTitle">Today's Tasks (0/2)</div><div id="detailTasks"></div><button id="openTasks" class="sync-btn">+ Add / choose tasks</button><div class="focus-panel">
       <div class="focus-line"><strong>Focus · 50 min</strong><strong id="timerText">50:00</strong></div>
       <div class="focus-line"><span id="focusTask">Choose a task clock to start</span><span id="focusMode">Idle</span></div>
       <div class="focus-controls"><button id="focusToggle">▶ Start</button><button id="focusReset">↺ Reset</button></div>

@@ -1,6 +1,8 @@
-# Connect your own Notion workspace
+# Optional: connect your own Notion workspace
 
-Muse v0.5.5 reads the exact property names below. It does not create a Notion template for you, and it does not parse an arbitrary document body. This setup is an early integration path awaiting live cross-account testing.
+Local tasks and manual mood in Muse v0.6.0 work without Notion. Follow this guide only if you want connected task and mood updates.
+
+Muse v0.6.0 reads the exact property names below. It does not create a Notion template for you, and it does not parse an arbitrary document body. This setup is an early integration path awaiting live cross-account testing.
 
 ## 1. Prepare a Tasks data source
 
@@ -36,7 +38,7 @@ Keep the integration token private. Do not share the creator's integration, work
 
 ## 4. Connect in Muse
 
-Expand the widget and open **Settings**. Enter:
+Expand the widget and open **Settings → Set up optional Notion connection**. Enter:
 
 - **Integration token:** your integration credential.
 - **Tasks data source ID:** the ID used by Notion's `/v1/data_sources/{id}/query` API, not the database container ID or an arbitrary page ID.
@@ -44,7 +46,9 @@ Expand the widget and open **Settings**. Enter:
 
 A data source ID is available through Notion's data source controls / API. Do not assume the ID in an ordinary database URL is the correct data source ID.
 
-Choose **Save & sync**, then **All Tasks** and select up to two tasks. Click a task clock to start focusing. Muse reads only; it will not mark your Notion task complete.
+Choose **Save & sync** to enable optional sync and read mood from Notion. In **All Tasks**, imported tasks appear alongside your local tasks. Select up to two tasks in total for Today. Muse reads Notion only; complete imported tasks in Notion. Local tasks can be completed or reopened inside Muse.
+
+Choose a mood yourself to switch back to manual, or use **Settings → Mood source**. Turning off sync returns to local mode and removes imported tasks from Today while preserving local tasks and focus history. Re-enabling sync requires selecting imported Today tasks again. Disconnect removes the saved integration and imported task cache.
 
 ## If it does not work
 

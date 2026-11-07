@@ -1,13 +1,13 @@
 {
   "name": "muse-desktop",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "private": true,
-  "description": "Muse: a calm Windows desktop cat with daily tasks and a focus timer",
+  "description": "A local-first Windows desktop cat, task board and focus timer with optional Notion sync",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "check": "node --check focus-store.js && node --check main.js && node --check preload.js && node --check renderer.js && node --check notion-sync.js && node --check scripts/test-state.js",
-    "test": "node scripts/test-state.js && node scripts/test-notion.js && node scripts/test-focus.js",
+    "check": "node --check focus-store.js && node --check main.js && node --check preload.js && node --check renderer.js && node --check notion-sync.js && node --check scripts/test-state.js && node --check task-store.js && node --check scripts/test-packaged.js",
+    "test": "node scripts/test-state.js && node scripts/test-notion.js && node scripts/test-focus.js && node scripts/test-tasks.js && node scripts/test-app-sync.js",
     "dist:win": "electron-builder --win nsis portable",
     "pack:win": "electron-builder --win portable",
     "test:packaged": "node scripts/test-packaged.js"
@@ -29,6 +29,7 @@
       "preload.js",
       "notion-sync.js",
       "focus-store.js",
+      "task-store.js",
       "index.html",
       "style.css",
       "assets/**/*",

@@ -1,10 +1,19 @@
 name: Publish friend-testing preview
 on:
   workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Successful Windows build run ID
+        required: true
+        type: string
+      source_sha:
+        description: Exact 40-character source commit of that build
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
-  group: publish-v0.5.5
+  group: publish-preview
   cancel-in-progress: false
 jobs:
   publish:
@@ -17,31 +26,39 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      BUILD_RUN_ID: '42337004089'
-      SOURCE_SHA: b9ed47a2f18f61b96cbcf02d2feb5998ef4f8491
+      BUILD_RUN_ID: ${{ inputs.build_run_id }}
+      SOURCE_SHA: ${{ inputs.source_sha }}
     steps:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - name: Verify the exact successful Windows build
+      - name: Verify source and version of the successful Windows build
         shell: bash
         run: |
           set -euo pipefail
+          [[ "$BUILD_RUN_ID" =~ ^[0-9]+$ ]]
+          [[ "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
           gh api "repos/$GH_REPO/actions/runs/$BUILD_RUN_ID" > "$RUNNER_TEMP/muse-build.json"
           node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/muse-build.json")); if(r.conclusion!=="success" || r.head_sha!==process.env.SOURCE_SHA || r.path!==".github/workflows/windows-build.yml") throw Error("Unexpected build source or status");'
+          gh api "repos/$GH_REPO/contents/package.json?ref=$SOURCE_SHA" --jq .content | base64 --decode > "$RUNNER_TEMP/source-package.json"
+          VERSION=$(node -p 'require("./package.json").version')
+          SOURCE_VERSION=$(node -p 'require(process.env.RUNNER_TEMP+"/source-package.json").version')
+          test "$VERSION" = "$SOURCE_VERSION"
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
       - name: Download tested executable artifacts
         uses: actions/download-artifact@v5
         with:
           name: Muse-Desktop-Windows-unsigned
           path: release-assets
-          run-id: ${{ env.BUILD_RUN_ID }}
+          run-id: ${{ inputs.build_run_id }}
           github-token: ${{ github.token }}
-      - name: Validate release filenames and create checksums
+      - name: Validate release files and create checksums
         shell: bash
         run: |
           set -euo pipefail
-          test -f release-assets/Muse-Desktop-Setup-0.5.5-x64.exe
-          test -f release-assets/Muse-Desktop-Portable-0.5.5-x64.exe
+          test -f "release-assets/Muse-Desktop-Setup-$VERSION-x64.exe"
+          test -f "release-assets/Muse-Desktop-Portable-$VERSION-x64.exe"
           test "$(find release-assets -type f | wc -l)" -eq 2
           cd release-assets
           sha256sum ./*.exe > SHA256SUMS.txt
@@ -49,15 +66,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if gh release view v0.5.5 --json tagName,isPrerelease,isDraft,assets > "$RUNNER_TEMP/muse-release.json" 2>/dev/null; then
-            node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/muse-release.json")); if(r.tagName!=="v0.5.5" || !r.isPrerelease || r.isDraft || r.assets.length!==0) throw Error("Refusing to replace an existing release or assets");'
-            TAG_SHA=$(gh api "repos/$GH_REPO/commits/v0.5.5" --jq .sha)
+          TAG="v$VERSION"
+          if gh release view "$TAG" --json tagName,isPrerelease,isDraft,assets > "$RUNNER_TEMP/muse-release.json" 2>/dev/null; then
+            node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/muse-release.json")); if(r.tagName!=="v"+process.env.VERSION || !r.isPrerelease || r.isDraft || r.assets.length!==0) throw Error("Refusing to replace published assets");'
+            TAG_SHA=$(gh api "repos/$GH_REPO/commits/$TAG" --jq .sha)
             test "$TAG_SHA" = "$SOURCE_SHA"
-            gh release upload v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt
+            gh release upload "$TAG" release-assets/*.exe release-assets/SHA256SUMS.txt
           else
-            gh release create v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt \
+            gh release create "$TAG" release-assets/*.exe release-assets/SHA256SUMS.txt \
               --target "$SOURCE_SHA" \
-              --title 'Muse Desktop v0.5.5 — Friend-testing preview' \
-              --notes-file docs/releases/v0.5.5.md \
+              --title "Muse Desktop v$VERSION — Local tasks + optional Notion" \
+              --notes-file "docs/releases/v$VERSION.md" \
               --prerelease
           fi

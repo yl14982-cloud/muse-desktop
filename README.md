@@ -3,109 +3,99 @@
 # Muse Desktop 🐱
 ### A little company. One task at a time.
 
-A quiet desktop cat for your daily tasks and 50-minute focus sessions.
+A Windows desktop cat, personal task board and 50-minute focus timer.
 
-**Windows x64 · English interface · Early friend-testing preview**
+**Add a task. Choose your next step. Start focusing. No account needed.**
 
-[**Download the Windows installer**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.5.5/Muse-Desktop-Setup-0.5.5-x64.exe) · [**View the release**](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.5.5) · [**First-time guide**](docs/TRY-MUSE.md)
+[**Download for Windows**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.6.0/Muse-Desktop-Setup-0.6.0-x64.exe) · [**Release notes**](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.6.0) · [**First-time guide**](docs/TRY-MUSE.md)
 
 ![Windows build](https://github.com/yl14982-cloud/muse-desktop/actions/workflows/windows-build.yml/badge.svg)
 
-![Muse's pastel cat and compact daily task widget](assets/screenshots/widget-preview.png)
+![Muse's compact pastel cat and task widget](assets/screenshots/widget-preview.png)
 
 </div>
 
 ## Meet Muse
 
-Keep a small companion on your desktop, choose what matters today, and give one task your attention. Muse brings together a pastel cat, up to two daily tasks, and a focus timer in a compact widget. Click the widget to open the full panel; hide it to the system tray when you want more space.
+Muse keeps a small, quiet companion on your desktop while you organize your next steps. Add your own tasks, choose up to two for Today, mark them complete, and use a 50-minute focus timer. Your tasks, mood choice and session records stay on your computer.
 
-Muse is an early personal project shared for feedback. It is ready for a small, informed trial, with the limitations below. The images in this README are interface previews with sample tasks.
+**v0.6.0 makes local tasks the default.** You can use the same app on its own, or optionally connect Notion for a conversation-driven workflow. You do not need separate basic and connected installers. This is an unsigned friend-testing preview, not a stable release.
 
-## What you can do
+The preview image above shows the compact widget with sample tasks. New local-task and optional-sync controls are available in the expanded panel.
 
-| Feature | How it works today |
+## Two ways to use the same app
+
+| | Local mode — ready after installation | Optional connected mode |
+| --- | --- | --- |
+| Tasks | Type tasks directly in Muse, select Today tasks, complete and reopen them. | Keep your local tasks and also read tasks from your own Notion data source. |
+| Mood | Choose one of five cat moods yourself. | Optionally read the mood saved in your Notion State row; manual mood is still available. |
+| Focus | Start, pause, resume and reset a 50-minute timer for a selected unfinished task. | The same timer works with local or selected Notion tasks. |
+| Setup | No account, token, Notion or chatbot required. | Configure your own read-only Notion integration in Settings when you want sync. |
+| Completion | Local tasks can be completed or reopened in Muse. | Imported tasks stay read-only; update their completion in Notion. |
+| Chat updates | Not required. | An explicitly authorized assistant can write tasks or mood into Notion; Muse refreshes those fields. The full live desktop chain is still under validation. |
+
+You choose which tasks appear in Today; sync never automatically replaces that choice with an arbitrary deadline. A Notion refresh does not overwrite the local task library. Turning off sync keeps local tasks and focus history.
+
+## Install and try it
+
+| Download | Use |
 | --- | --- |
-| Choose today's tasks | Read tasks from your own Notion data source and select up to two in **All Tasks**. |
-| Focus for 50 minutes | Start, pause, resume or reset a timer attached to a selected task. Reset preserves elapsed time in your local session history. |
-| Keep a small record | Add an optional session goal, check-in and review. Records stay on this device. |
-| Share a mood explicitly | Muse reads a saved Notion mood: **Focused**, **Calm**, **A bit tired**, **Low energy** or **Stressed**. |
-| Change your mind | Remove a task from Today using the cat button. The original Notion task is kept. |
-| Stay unobtrusive | Use the compact widget, expanded panel or system-tray menu. |
+| [**Windows x64 installer — v0.6.0**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.6.0/Muse-Desktop-Setup-0.6.0-x64.exe) | Recommended. Installs Muse and creates Desktop / Start Menu shortcuts. |
+| [Portable edition — v0.6.0](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.6.0/Muse-Desktop-Portable-0.6.0-x64.exe) | Try the app without an installation wizard. |
+| [Release notes and checksums](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.6.0) | Changes, test scope, limitations and file checksums. |
 
-<details>
-<summary><strong>See the expanded panel</strong></summary>
+Public release downloads do not require a GitHub account, Node.js, PowerShell or Git. The **Source code** ZIP is for developers.
 
-![Muse's expanded task and focus panel](assets/screenshots/dashboard-preview.png)
+1. Download the installer, read the unsigned-build notice below and decide whether to run the preview.
+2. Install, then open the installed **Muse Desktop** shortcut. Do not launch the `Setup` file again for daily use.
+3. Click **+ Add your first task**, enter a task name and choose **Add task**.
+4. Check the task in **All Tasks** to select it for Today. Up to two tasks can be selected.
+5. Click its clock to focus. In the expanded panel, click a local task's circle to complete or reopen it.
+6. Choose your cat's mood in the expanded panel. Notion setup can wait until you want it.
 
-</details>
+**Unsigned preview:** Microsoft Defender SmartScreen may show an unknown-publisher warning. Confirm the repository and exact filename before deciding whether to run it. **More info → Run anyway** may be offered if you choose to trust the build. Do not disable Windows protection. Stop if the source is unexpected or your organization's policy blocks it. Automated tests and dependency audits do not guarantee complete security.
 
-## Download and install
+[Detailed Windows guide](docs/INSTALL-WINDOWS.md) · [Friend-testing checklist](docs/TRY-MUSE.md)
 
-**You do not need Node.js, PowerShell, Git or a GitHub account to download the public release files.**
+## Optional: connect Notion and chat updates
 
-| Download | Choose this if… |
-| --- | --- |
-| [**Muse Desktop 0.5.5 — Windows installer (.exe)**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.5.5/Muse-Desktop-Setup-0.5.5-x64.exe) | You want to install Muse and launch it from a Desktop or Start Menu shortcut. Recommended for friend testing. |
-| [Portable edition (.exe)](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.5.5/Muse-Desktop-Portable-0.5.5-x64.exe) | You want to try it without an installation wizard. |
-| [Release notes and checksums](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.5.5) | You want to inspect the build, changes and current limitations first. |
+Open **Settings → Set up optional Notion connection** when you want it. [Follow the exact schema and setup guide](docs/NOTION-SETUP.md). Use your own integration and workspace; no creator credentials or personal workspace are bundled.
 
-1. Download the **installer** above; the **Source code** ZIP on the release page is for developers.
-2. Run it if you trust this unsigned preview, then complete the installation wizard.
-3. For daily use, open **Muse Desktop** from the installed shortcut. Keep the installer for installation only; opening `Setup` again starts the installer again.
-4. Click an empty area of the widget to expand it. Open **Settings** to connect your own Notion, then **All Tasks** to choose up to two tasks.
-5. Click a task's clock to start a focus block.
+The same All Tasks panel then includes a **From Notion · read only** section. Your local tasks remain available. After saving a connection, Muse reads mood from Notion; choosing a mood yourself switches back to manual. You can also choose the mood source explicitly in Settings. Turn off sync to return to local mode.
 
-**Before installing:** this preview is unsigned, so Microsoft Defender SmartScreen may show “Windows protected your PC” or an unknown publisher. This is not a safety certification. Check that you downloaded `Muse-Desktop-Setup-0.5.5-x64.exe` from this repository's release. If you trust it and choose to continue, use **More info → Run anyway** when offered. Do not disable Windows protection. Stop if the filename or source is unexpected, or your organization blocks the app.
+### What “chat-driven” means
 
-[Detailed Windows guide](docs/INSTALL-WINDOWS.md) · [Five-minute trial checklist](docs/TRY-MUSE.md)
+An assistant with your explicit authorization and a working Notion connection can write task or state fields in Notion. Muse then reads them on **Sync now** or its roughly 90-second refresh. A task written in chat appears in the imported task list; you still choose whether to put it in Today.
 
-## Before your first focus session
+Muse does not continuously watch ChatGPT, infer your mood, or read an arbitrary document. Updating a document alone does not update the app. There is no generic document-to-Notion writer bundled in Muse.
 
-**Real personal tasks currently require Notion.** Each tester uses their own workspace and read-only integration. No account, credentials or personal workspace belonging to the creator is bundled with Muse.
+**Live integration status:** assistant → Notion test write and readback have been demonstrated in the creator's workspace. Desktop readback was blocked by incomplete Notion configuration, so the full live chain and a friend's separate workspace are **not yet validated**. Automated adapter tests use simulated responses. [Integration test procedure](docs/INTEGRATION-TEST.md).
 
-- Connect a Tasks data source and a Muse State page in **Settings**. [Follow the exact setup and field names](docs/NOTION-SETUP.md).
-- Select a task in **All Tasks** before starting a timer.
-- `No tasks selected` means Muse is running but Today is empty. The timer will not start until a task is selected.
-- A fresh profile may show sample tasks so you can preview the interface; this is not a local task editor.
+## What gets tested
 
-**Not available yet:** typing a new task directly into Muse, starting a timer without a task, automatically selecting today's work, or writing task completion back to Notion.
+CI audits the complete npm dependency tree, checks JavaScript, tests local task storage and migration, exercises source merging / offline failures / sync cancellation, builds both Windows executables, and launches the packaged Windows app.
 
-## What has actually been tested?
+The packaged test exercises the local UI: adding, selecting, completing and reopening tasks; two-task limits; literal task text; focus actions; manual mood; restart persistence; and optional connection controls. Tests use an isolated profile and no personal Notion credentials. They launch the unpacked app; real installer and upgrade behavior still need manual feedback.
 
-| Area | Evidence / status |
-| --- | --- |
-| Windows packaging | Installer and portable executables built successfully in GitHub Actions. |
-| Packaged application | Automated Windows test passed for startup, expanded panel, task selection, timer start/pause/reset, restart persistence, Settings and authenticated bridge rejection. This test launches the unpacked app, not the installer wizard. |
-| Dependency audit | The v0.5.5 build reported **0 npm audit advisories**, including development dependencies, at build time. This is not a complete security audit or a permanent guarantee. |
-| Notion adapter | Parsing and requests tested with mocked API responses. Live, cross-account Notion setup still needs manual validation. |
-| Your own computer | The creator has opened the widget on Windows; installer behavior and the full user journey still need friend feedback. |
-| **Chat → document → Notion → Muse** | **Not yet validated end to end.** There is no general document-to-Notion automation bundled with this app. |
+[Build and test runs](https://github.com/yl14982-cloud/muse-desktop/actions/workflows/windows-build.yml)
 
-[Inspect the successful v0.5.5 build and test logs](https://github.com/yl14982-cloud/muse-desktop/actions/runs/42337004089) · [Manual integration test procedure](docs/INTEGRATION-TEST.md)
+## Feedback and next steps
 
-### About conversation-driven updates
+[Report a bug](https://github.com/yl14982-cloud/muse-desktop/issues/new?template=bug-report.yml) or [suggest an improvement](https://github.com/yl14982-cloud/muse-desktop/issues/new). Include your Muse / Windows versions and steps to reproduce. Remove tokens, private Notion IDs, task text and private paths from public screenshots.
 
-Muse reads specific Notion properties; it does **not** read a generic document, listen to every ChatGPT message, or infer your mood continuously. A connected assistant would need explicit authorization and working access to write the agreed state into the correct Notion page. Muse can then read that saved state on **Sync now** or its roughly 90-second refresh. Updating a document alone does not update Muse.
+Next priorities: finish live Notion and conversation testing, verify upgrades on real Windows profiles, and investigate code signing and automatic updates. Mood drawings are static; auto-start and automatic app updates are not implemented.
 
-Please treat this chain as an integration under evaluation, rather than a finished automatic feature.
+## Privacy and upgrades
 
-## Help shape the next version
+Local tasks, choices, mood and focus notes are stored in the app's user-data directory. Notion tokens use Windows-backed encrypted storage. Local tasks are never uploaded by the Notion reader. Notion tasks remain read-only; the optional writer in your chat tool has separate authorization.
 
-Friends are especially welcome to test installing, launching from the shortcut, selecting tasks and using the timer. [Start with the trial checklist](docs/TRY-MUSE.md), then [report a bug](https://github.com/yl14982-cloud/muse-desktop/issues/new?template=bug-report.yml) or [suggest an improvement](https://github.com/yl14982-cloud/muse-desktop/issues/new).
+The token-protected loopback bridge remains available for development mood updates; it cannot replace your local task board. [Privacy and data](docs/PRIVACY.md).
 
-Never include tokens, private task text or unredacted personal screenshots in public issues.
-
-Next priorities: finish live Notion and conversation-chain testing, add local tasks / task-free focus, improve first-run guidance, and investigate code signing. Mood drawings are currently static; auto-start and automatic app updates are not implemented.
-
-## Privacy
-
-Task selections, focus history and notes are stored locally. The Notion token is encrypted with Windows-backed Electron `safeStorage`; it is not returned in the Settings password field. Notion content is fetched read-only. A token-protected local bridge listens on `127.0.0.1:43187`.
-
-[Privacy and data](docs/PRIVACY.md)
+v0.6.0 retains existing focus files and encrypted connection settings and migrates cached selected Notion tasks when available. Pure migration tests and isolated restart tests pass in CI; back up your existing user-data folder before an upgrade, as real-profile migration is still under manual validation. Installed copies do not auto-update: download and install the new version.
 
 ## For developers
 
-Node.js **22.12 or newer** and Windows are required for the supported development workflow.
+Use Windows and Node.js **22.12 or newer**:
 
 ```powershell
 npm.cmd ci --foreground-scripts --ignore-scripts=false
@@ -115,9 +105,7 @@ npm.cmd test
 npm.cmd start
 ```
 
-If the Electron binary is missing, run `npx.cmd install-electron` once before starting the app.
-
-Build and test:
+Build and validate:
 
 ```powershell
 npm.cmd audit --audit-level=low
@@ -125,10 +113,8 @@ npm.cmd run dist:win -- --publish never
 npm.cmd run test:packaged
 ```
 
-v0.5.5 pins Electron 45.2.3 and electron-builder 26.18.0. A targeted `minimatch@>=7 <11.0.1` override supplies the patched 11.0.1 release; remove it once upstream dependencies include the fix. CI rejects dependency audit findings before publishing build artifacts.
-
-[Release publishing procedure](docs/PUBLISHING.md)
+Electron 45.2.3 and electron-builder 26.18.0 are pinned. A targeted minimatch override supplies patched 11.0.1 to the build tools. [Publishing procedure](docs/PUBLISHING.md).
 
 ## License
 
-Source code is public, but an open-source license has not yet been selected. Public visibility alone does not grant general reuse or redistribution rights. The published Windows pre-release is offered for personal testing and feedback.
+Source code is public, but an open-source license has not yet been selected. Public visibility alone does not grant general reuse or redistribution rights. Published Windows previews are offered for personal testing and feedback.

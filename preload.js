@@ -1,5 +1,9 @@
 const {contextBridge,ipcRenderer}=require('electron');
 contextBridge.exposeInMainWorld('MuseDesktop',{
+  addTask:title=>ipcRenderer.invoke('muse:add-task',title),
+  setMood:mood=>ipcRenderer.invoke('muse:set-mood',mood),
+  setMoodSource:source=>ipcRenderer.invoke('muse:set-mood-source',source),
+  setNotionEnabled:enabled=>ipcRenderer.invoke('muse:set-notion-enabled',enabled),
   getState:()=>ipcRenderer.invoke('muse:get-state'),
   getFocus:()=>ipcRenderer.invoke('muse:get-focus'),
   focusAction:(action,payload)=>ipcRenderer.invoke('muse:focus-action',action,payload),

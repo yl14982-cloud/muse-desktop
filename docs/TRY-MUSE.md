@@ -1,41 +1,41 @@
-# Try Muse with a friend
+# Try Muse Desktop v0.6.0
 
-Thanks for trying this early Windows preview. The goal is to find confusing steps and broken behavior, not to measure your productivity.
+One app, two ways to use it. Start with the local board; connect Notion only if you want sync later.
 
-## Start here
+## Install
 
-1. Use the [v0.5.5 release](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.5.5) and download **Muse-Desktop-Setup-0.5.5-x64.exe**. You do not need a GitHub account, developer tools or the Source code ZIP.
-2. Read the unsigned-build notice in the [installation guide](INSTALL-WINDOWS.md) before deciding whether to run it.
-3. Install, then launch the installed **Muse Desktop** shortcut. Do not launch `Setup` again for daily use.
-4. Try expanding, collapsing, dragging the widget by its handle, hiding to the tray, and restoring it with **Show Muse**.
+Download **Muse-Desktop-Setup-0.6.0-x64.exe** from the [release](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.6.0). It is an unsigned preview; read the [Windows guide](INSTALL-WINDOWS.md) before deciding whether to run it. After installation, launch the installed **Muse Desktop** shortcut, not the Setup file again. No account or developer tools are needed.
 
-## Test tasks and focus
+## A five-minute local trial
 
-To use your own tasks, first [set up your own Notion connection](NOTION-SETUP.md). Do not ask the creator for their token or workspace access. Without a task selected, the timer does not start; manual local task entry and task-free focus are not implemented.
+- [ ] Click **+ Add your first task** to expand Muse and open All Tasks.
+- [ ] Enter a task and click **Add task**. Check it to select it for Today.
+- [ ] Add another task and choose it; Today can hold up to two.
+- [ ] Click a selected task's clock to start a 50-minute focus cycle; pause and resume.
+- [ ] In **Session notes**, optionally add a goal, check-in or review.
+- [ ] Reset saves elapsed time into local history. Finishing a focus cycle does not automatically complete a task.
+- [ ] Click a local task's circle to complete it. Click again to reopen. Completing an active local task saves and resets its current focus session.
+- [ ] Use **All Tasks → Complete / Reopen** to manage tasks that are not in Today.
+- [ ] Remove a task from Today with its × button; the task stays in All Tasks.
+- [ ] Choose a mood in the expanded panel. It is a manual choice, not an inferred emotion.
+- [ ] Restart Muse; tasks, completion state, selected tasks, mood and saved focus records are retained.
+- [ ] Hide to the system tray and restore with **Show Muse**.
 
-- [ ] **Settings → Save & sync** shows a connection result.
-- [ ] **All Tasks** shows the tasks from your shared data source.
-- [ ] Select one or two tasks; Today shows the same titles.
-- [ ] Click a task clock; the timer starts. Pause and resume it.
-- [ ] Add a goal or check-in in **Session notes**, if desired.
-- [ ] Reset saves elapsed time into the local history.
-- [ ] Restart Muse; a saved paused session / history is still available.
-- [ ] Remove a Today task with the cat button; the original Notion task remains.
+No tasks selected? Add one in All Tasks, then check it for Today. If all selected tasks are complete, reopen one or choose an unfinished task before starting a new timer.
 
-## What is still experimental?
+## Optional connected trial
 
-The complete **conversation → document → Notion → Muse** chain has not been validated. There is no bundled generic document-to-Notion writer. This release does not listen to ChatGPT automatically, detect emotions, or complete Notion tasks for you. [Integration test details](INTEGRATION-TEST.md).
+Follow [Notion setup](NOTION-SETUP.md) using your own workspace and read-only integration. Save & sync enables the connection and reads mood from Notion. Your local tasks stay in the same app, alongside imported tasks. Selecting a mood yourself switches back to manual; Settings also offers an explicit mood-source choice.
 
-The automated Windows test exercises the unpacked application. It does not prove that every Windows installation, display setup or existing profile behaves correctly.
+- [ ] Imported tasks appear in **From Notion · read only**.
+- [ ] Local tasks remain available after syncing.
+- [ ] Select a local and a Notion task together, subject to the same two-task limit.
+- [ ] Update an imported task in Notion; refresh Muse and verify the title / status is reflected.
+- [ ] Complete imported tasks in Notion. Muse does not write their completion back.
+- [ ] Turn off sync; your local tasks, mood and focus history still work.
 
-## Send useful feedback
+Do not share the creator's integration token or workspace. Chat-driven writes use separate authorization. The full conversation → Notion → desktop route still needs live validation; changing a document alone is not enough. [Integration checklist](INTEGRATION-TEST.md).
 
-[Open a bug report](https://github.com/yl14982-cloud/muse-desktop/issues/new?template=bug-report.yml) with:
+## Report feedback
 
-- Muse version and Windows version.
-- Installer or portable edition; fresh install or upgrade.
-- What you clicked, what you expected, and what happened.
-- Whether it still happens after restarting.
-- A redacted screenshot, if helpful.
-
-Please remove integration tokens, private page IDs, personal task names and private file paths before posting. If you do not want to report publicly, describe the issue directly to the friend who sent you Muse.
+[Open a bug report](https://github.com/yl14982-cloud/muse-desktop/issues/new?template=bug-report.yml). Include Muse / Windows versions, installer or portable edition, fresh install or upgrade, steps, expected behavior and actual behavior. Remove tokens, private task content, Notion IDs and private paths before posting publicly.

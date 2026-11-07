@@ -6,18 +6,20 @@ const http = require('node:http');
 const crypto = require('node:crypto');
 const notionSync = require('./notion-sync');
 const focusStore = require('./focus-store');
+const taskStore = require('./task-store');
 
 const MOODS = new Set(['Focused', 'Calm', 'A bit tired', 'Low energy', 'Stressed']);
 const PORT = 43187;
 let win, tray, server, token, dataFile, tokenFile, syncTimer;
 let connectionFile; let connection={token:'',tasksId:'',stateId:''};
 let focus = focusStore.createFocus(); let focusFile, focusTicker;
-let availableTasks=[]; let syncStatus={configured:false,ok:false,message:"Notion not configured",lastSync:null}; let chosenTaskIds=[];
+let board=taskStore.createStore(), boardFile; let syncGeneration=0;
+let syncStatus={configured:false,ok:true,message:'Local mode · No account needed',lastSync:null}; let chosenTaskIds=[];
 let current = {
-  mood: 'A bit tired',
-  tasks: [{id:'dsp-review', title:'DSP Review', done:false}, {id:'dsp-preview', title:'DSP Preview', done:false}],
+  mood: 'Calm',
+  tasks: [],
   updatedAt: null,
-  source: 'demo'
+  source: 'Local mood'
 };
 const clamp = (s, limit) => String(s ?? '').slice(0, limit);
 function persist() { fs.writeFileSync(dataFile, JSON.stringify(current, null, 2), {encoding:'utf8', mode:0o600}); }
@@ -47,7 +49,25 @@ function load() {
   try {token=fs.readFileSync(tokenFile,'utf8').trim(); if(token.length<32)throw Error('invalid');}
   catch {token=crypto.randomBytes(32).toString('hex');fs.writeFileSync(tokenFile,token,{mode:0o600});}
   try { const setting=JSON.parse(fs.readFileSync(path.join(app.getPath('userData'),'muse-settings.json'),'utf8'));chosenTaskIds=Array.isArray(setting.chosenTaskIds)?setting.chosenTaskIds.slice(0,2):[]; }catch{}
-  persist();
+  boardFile=path.join(app.getPath('userData'),'muse-tasks.json');
+  let savedBoard=null;
+  try {savedBoard=JSON.parse(fs.readFileSync(boardFile,'utf8'));} catch(e){if(e.code!=='ENOENT')throw Error('Could not read local tasks. Your task file was left unchanged.');}
+  const configured=!!(notionConfig().token&&notionConfig().tasksId&&notionConfig().stateId);
+  board=taskStore.createStore(savedBoard,current,configured,chosenTaskIds);
+  persistBoard();refreshBoard();
+}
+function refreshBoard(){
+  current={mood:board.mood,tasks:taskStore.todayTasks(board),updatedAt:board.updatedAt,source:board.moodSource==='notion'?'Notion Muse State':'Local mood'};
+  try{persist();}catch(e){console.warn('Could not save derived widget cache:',e.message);}
+}
+function persistBoard(){
+  const temporary=boardFile+'.tmp';
+  fs.writeFileSync(temporary,JSON.stringify(board,null,2),{mode:0o600});
+  fs.renameSync(temporary,boardFile);
+}
+function changeBoard(change){
+  const before=structuredClone(board);
+  try{const result=change(board);persistBoard();refreshBoard();notify();notifySync();return result;}catch(e){board=before;throw e;}
 }
 function focusSnapshot(){
   const value=focusStore.snapshot(focus);
@@ -82,7 +102,7 @@ function focusAction(action,payload={}){
     if(focus.mode==='running')return focusSnapshot();
     if(focus.mode==='paused'){focus.startedAt=now;focus.mode='running';}
     else{
-      const requested=current.tasks.find(t=>t.id===payload.taskId);
+      const requested=current.tasks.find(t=>t.id===payload.taskId&&!t.done);
       if(!requested)throw Error('Choose one of today’s tasks first');
       focus={...focusStore.createFocus(),sessions:focus.sessions,mode:'running',taskId:requested.id,taskTitle:requested.title,goal:text(payload.goal||'',500),startedAt:now,activeDate:focusStore.todayKey()};
     }
@@ -100,37 +120,35 @@ function focusAction(action,payload={}){
   else throw Error('Unknown focus action');
   persistFocus();notifyFocus();return focusSnapshot();
 }
-function saveSettings(){fs.writeFileSync(path.join(app.getPath('userData'),'muse-settings.json'),JSON.stringify({chosenTaskIds},null,2),{mode:0o600});}
 function notionConfig(){return {token:connection.token||process.env.MUSE_NOTION_TOKEN||'',tasksId:connection.tasksId||process.env.MUSE_TASKS_DATA_SOURCE_ID||'',stateId:connection.stateId||process.env.MUSE_STATE_PAGE_ID||''};}
-function connectionStatus(){const c=notionConfig();return {configured:!!(c.token&&c.tasksId&&c.stateId),tasksId:c.tasksId,stateId:c.stateId,encrypted:!!connection.token};}
-function syncSnapshot(){return {state:current,availableTasks,syncStatus,chosenTaskIds};}
+function connectionStatus(){const c=notionConfig();return {configured:!!(c.token&&c.tasksId&&c.stateId),tasksId:c.tasksId,stateId:c.stateId,encrypted:!!connection.token,enabled:board.notionEnabled};}
+function syncSnapshot(){return {state:current,availableTasks:taskStore.allTasks(board),syncStatus,chosenTaskIds:board.selectedIds,notionEnabled:board.notionEnabled,moodSource:board.moodSource};}
 function notifySync(){if(win&&!win.isDestroyed())win.webContents.send('muse:sync',syncSnapshot());}
 async function syncNotion(){
-  const cfg=notionConfig();
-  if(!cfg.token || !cfg.tasksId || !cfg.stateId){syncStatus={configured:false,ok:false,message:'Connect Notion in Settings',lastSync:null};notifySync();return syncSnapshot();}
+  const cfg=notionConfig(),generation=syncGeneration;
+  if(!board.notionEnabled){syncStatus={configured:connectionStatus().configured,ok:true,message:'Local mode · No account needed',lastSync:null};notifySync();return syncSnapshot();}
+  if(!cfg.token || !cfg.tasksId || !cfg.stateId){syncStatus={configured:false,ok:false,message:'Finish Notion setup, or turn off sync to use local mode',lastSync:null};notifySync();return syncSnapshot();}
   syncStatus={...syncStatus,configured:true,message:'Syncing…'};notifySync();
   const errors=[];
-  try {const tasks=await notionSync.readTasks(cfg);availableTasks=tasks;
-    // Only explicitly selected tasks are shown; never silently pick deadlines or Proposed rows.
-    current.tasks=chosenTaskIds.map(id=>tasks.find(t=>t.id===id)).filter(Boolean).map(t=>({id:t.id,title:t.title,done:t.status==='Done'}));
-    if(chosenTaskIds.length===0)current.tasks=[];
-    current.source='Notion Tasks';persist();notify();
-  }catch(e){errors.push('Tasks: '+e.message);}
-  try {const result=await notionSync.readMood(cfg);if(result.mood){current.mood=result.mood;current.updatedAt=result.observedAt||null;current.source='Notion Muse State';persist();notify();}}
-  catch(e){errors.push('Mood: '+e.message);}
+  const active=()=>generation===syncGeneration&&board.notionEnabled;
+  try {const tasks=await notionSync.readTasks(cfg);if(!active())return syncSnapshot();changeBoard(s=>taskStore.replaceNotion(s,tasks));}
+  catch(e){errors.push('Tasks: '+e.message);}
+  if(!active())return syncSnapshot();
+  if(board.moodSource==='notion'){
+    try{const result=await notionSync.readMood(cfg);if(!active())return syncSnapshot();if(!result.mood)throw Error('Notion Mood must be one of the five supported states');if(board.moodSource==='notion')changeBoard(s=>{s.mood=result.mood;s.updatedAt=result.observedAt||null;});}
+    catch(e){errors.push('Mood: '+e.message);}
+  }
+  if(!active())return syncSnapshot();
   syncStatus={configured:true,ok:errors.length===0,message:errors.length?errors.join('; '):'Connected',lastSync:new Date().toISOString()};notifySync();return syncSnapshot();
 }
 function notify() { if(win&&!win.isDestroyed()) win.webContents.send('muse:state', current); }
 function update(payload) {
-  if (!payload || typeof payload !== 'object') return {ok:false,error:'invalid payload'};
-  if (payload.mood!==undefined) {if (!MOODS.has(payload.mood)) return {ok:false,error:'invalid mood'};current.mood=payload.mood;}
-  if (payload.tasks!==undefined) {
-    if (!Array.isArray(payload.tasks)||payload.tasks.length>2||payload.tasks.some(t=>!t || typeof t.title!=='string' || !t.title.trim()))return {ok:false,error:'up to two valid tasks required'};
-    current.tasks=payload.tasks.map((t,i)=>({id:clamp(t.id??`task-${i+1}`,80),title:clamp(t.title,120),done:!!t.done}));
-  }
-  current.updatedAt = new Date().toISOString();
-  current.source = clamp(payload.source || 'local-bridge',80);
-  persist();notify();return {ok:true,state:current};
+  if(!payload || typeof payload!=='object')return {ok:false,error:'invalid payload'};
+  if(payload.mood!==undefined&&!MOODS.has(payload.mood))return {ok:false,error:'invalid mood'};
+  // Legacy bridges may set mood, but cannot replace a user's local task board.
+  if(payload.tasks!==undefined)return {ok:false,error:'Use local task controls or the optional Notion task source'};
+  changeBoard(s=>{if(payload.mood!==undefined)taskStore.setMood(s,payload.mood);s.updatedAt=new Date().toISOString();});
+  return {ok:true,state:current};
 }
 function send(res,status,body) {res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Access-Control-Allow-Origin':'null'});res.end(JSON.stringify(body));}
 function startBridge() {
@@ -195,44 +213,38 @@ app.whenReady().then(()=>{
     const tasksId=cleanId(payload.tasksId),stateId=cleanId(payload.stateId);
     if(!uuid.test(tasksId)||!uuid.test(stateId))throw Error('Invalid Notion IDs');
     const candidate=String(payload.token||'').trim();
-    const tokenToStore=candidate||connection.token;
+    const tokenToStore=candidate||connection.token||process.env.MUSE_NOTION_TOKEN;
     if(!tokenToStore||tokenToStore.length<16||tokenToStore.length>512)throw Error('Enter a valid Notion token');
     if(!safeStorage.isEncryptionAvailable())throw Error('Secure credential storage is not available on this computer');
     const encrypted=safeStorage.encryptString(tokenToStore).toString('base64');
     fs.writeFileSync(connectionFile,JSON.stringify({tasksId,stateId,tokenEncrypted:encrypted}),{mode:0o600});
-    connection={token:tokenToStore,tasksId,stateId};
+    connection={token:tokenToStore,tasksId,stateId};syncGeneration++;
+    changeBoard(s=>{taskStore.enableNotion(s,true);s.moodSource='notion';});
     return {connection:connectionStatus(),sync:await syncNotion()};
   });
-  ipcMain.handle('muse:forget-connection',()=>{connection={token:'',tasksId:'',stateId:''};try{fs.unlinkSync(connectionFile);}catch{};syncStatus={configured:false,ok:false,message:'Notion disconnected',lastSync:null};notifySync();return connectionStatus();});
+  ipcMain.handle('muse:forget-connection',()=>{
+    if(fs.existsSync(connectionFile))fs.unlinkSync(connectionFile);
+    connection={token:'',tasksId:'',stateId:''};syncGeneration++;
+    changeBoard(s=>{taskStore.enableNotion(s,false);s.notionTasks=[];});
+    syncStatus={configured:false,ok:true,message:'Local mode · Notion disconnected',lastSync:null};notifySync();return connectionStatus();
+  });
+  ipcMain.handle('muse:set-notion-enabled',async (_,enabled)=>{
+    if(enabled&&!connectionStatus().configured)throw Error('Save your Notion connection first');
+    syncGeneration++;changeBoard(s=>taskStore.enableNotion(s,!!enabled));return syncNotion();
+  });
+  ipcMain.handle('muse:set-mood',(_,mood)=>changeBoard(s=>{taskStore.setMood(s,mood);s.updatedAt=new Date().toISOString();return s.mood;}));
+  ipcMain.handle('muse:set-mood-source',async (_,source)=>{
+    if(!['manual','notion'].includes(source))throw Error('Invalid mood source');
+    if(source==='notion'&&(!board.notionEnabled||!connectionStatus().configured))throw Error('Connect Notion first');
+    changeBoard(s=>{s.moodSource=source;});return syncNotion();
+  });
   ipcMain.handle('muse:sync-now',()=>syncNotion());
-  // Selecting today's tasks is a LOCAL operation. Never write back to Notion.
-  // In particular, removal must still work when the Notion token is missing,
-  // an API refresh failed, or the task list has not loaded yet.
-  ipcMain.handle('muse:choose-tasks',(_,ids)=>{
-    if(!Array.isArray(ids)||ids.length>2||ids.some(id=>typeof id!=='string'||!id))return false;
-    const uniqueIds=[...new Set(ids)];
-    const oldTasks=current.tasks;
-    const oldChosen=chosenTaskIds;
-    const known=new Set([...chosenTaskIds,...oldTasks.map(t=>t.id),...availableTasks.map(t=>t.id)]);
-    if(uniqueIds.some(id=>!known.has(id)))return false;
-    const nextTasks=uniqueIds.map(id=>{
-      const latest=availableTasks.find(t=>t.id===id);
-      const cached=oldTasks.find(t=>t.id===id);
-      if(!latest&&!cached)return null;
-      return {id,title:latest?.title??cached.title,done:latest?latest.status==='Done':!!cached.done};
-    });
-    if(nextTasks.some(t=>!t))return false;
-    try{
-      chosenTaskIds=uniqueIds;
-      saveSettings();
-      current.tasks=nextTasks;
-      persist();
-    }catch(e){
-      chosenTaskIds=oldChosen;current.tasks=oldTasks;
-      console.error('Local today-task selection failed:',e);
-      return false;
-    }
-    notify();notifySync();return true;
+  ipcMain.handle('muse:add-task',(_,title)=>changeBoard(s=>taskStore.addLocal(s,title)));
+  ipcMain.handle('muse:choose-tasks',(_,ids)=>{changeBoard(s=>taskStore.selectTasks(s,ids));return true;});
+  ipcMain.handle('muse:toggle-task',(_,id)=>{
+    const task=changeBoard(s=>taskStore.toggleLocal(s,id));
+    if(task.done&&focus.taskId===id&&['running','paused'].includes(focus.mode))focusAction('reset');
+    return task;
   });
   ipcMain.handle('muse:expand',(_,flag)=>{expanded(!!flag);return true;});
   ipcMain.handle('muse:toggle-task',()=>false); // Notion remains canonical; no local false completion
