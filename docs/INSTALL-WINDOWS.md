@@ -8,6 +8,8 @@
 4. Extract the workflow artifact ZIP. It contains an installer (`Muse-Desktop-Setup-…exe`) and a portable EXE (`Muse-Desktop-Portable-…exe`).
 5. Run the installer. The installer is configured to create Desktop and Start Menu shortcuts. Alternatively, run the portable EXE without an installer.
 
+Version 0.5.5 updates the vulnerable dependencies. CI audits all dependencies and tests the unpacked Windows application, including timer persistence. This does not replace interactive installer testing on your computer.
+
 These builds are **unsigned**. Windows SmartScreen may warn you. Only run software you've built yourself or trust; inspect the source first. Do not disable security protections globally.
 
 ## Option B: Build locally on Windows
@@ -17,7 +19,7 @@ These builds are **unsigned**. Windows SmartScreen may warn you. Only run softwa
 3. Or, in PowerShell, from the project directory:
 
    ```powershell
-   npm.cmd install --foreground-scripts --ignore-scripts=false
+   npm.cmd ci --foreground-scripts --ignore-scripts=false
    npm.cmd run check
    npm.cmd test
    npm.cmd run dist:win

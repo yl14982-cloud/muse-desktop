@@ -1,6 +1,6 @@
 {
   "name": "muse-desktop",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "private": true,
   "description": "Muse: a calm Windows desktop cat with daily tasks and a focus timer",
   "main": "main.js",
@@ -9,11 +9,12 @@
     "check": "node --check focus-store.js && node --check main.js && node --check preload.js && node --check renderer.js && node --check notion-sync.js && node --check scripts/test-state.js",
     "test": "node scripts/test-state.js && node scripts/test-notion.js && node scripts/test-focus.js",
     "dist:win": "electron-builder --win nsis portable",
-    "pack:win": "electron-builder --win portable"
+    "pack:win": "electron-builder --win portable",
+    "test:packaged": "node scripts/test-packaged.js"
   },
   "devDependencies": {
-    "electron": "^35.7.5",
-    "electron-builder": "^26.0.12"
+    "electron": "45.2.3",
+    "electron-builder": "26.18.0"
   },
   "build": {
     "appId": "com.muse.desktop",
@@ -62,5 +63,8 @@
       "artifactName": "Muse-Desktop-Portable-${version}-${arch}.${ext}"
     },
     "artifactName": "Muse-Desktop-${version}-${arch}.${ext}"
+  },
+  "overrides": {
+    "minimatch@>=7 <11.0.1": "11.0.1"
   }
 }

@@ -20,3 +20,5 @@ build/
 *.key
 *.pfx
 *.p12
+
+smoke-proofs/

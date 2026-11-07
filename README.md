@@ -8,7 +8,7 @@ Muse is a lightweight Windows desktop pet that displays your two chosen daily ta
 
 ![Muse expanded panel preview](assets/screenshots/dashboard-preview.png)
 
-> **Development release candidate (v0.5.4).** The project includes Windows installer and portable-build automation, but no binary has been built or signed in this repository snapshot. The screenshot is a browser preview of the same widget interface, not proof of an installed Windows EXE.
+> **v0.5.5 security maintenance build.** Electron is updated to 45.2.3 and the affected build dependency is patched through a targeted override. CI audits the complete dependency tree, runs the existing tests, builds both Windows executables, and tests the unpacked Windows application. Builds remain unsigned. The screenshots below are interface previews.
 
 ## Features
 
@@ -31,6 +31,12 @@ Read **[Windows installation guide](docs/INSTALL-WINDOWS.md)** for two methods:
 2. Build on Windows by double-clicking `Build-Windows.cmd` (or using `npm.cmd run dist:win`).
 
 The installer build is configured to create a **Desktop** and **Start Menu** shortcut. After installation, no PowerShell is needed for normal startup.
+
+## Security maintenance
+
+v0.5.5 replaces Electron 35.7.5 with 45.2.3. The targeted `minimatch@>=7 <11.0.1` override supplies 11.0.1 to fix the build-tool advisory without downgrading electron-builder. Remove the override when upstream dependencies include the fix. CI fails on any npm audit advisory, including development dependencies. A clean audit is a dependency database check, not a guarantee of complete security.
+
+Code signing requires a signing identity and is not configured. Do not disable Windows security protection to install Muse. See [Windows installation guide](docs/INSTALL-WINDOWS.md).
 
 ## Developer setup
 
@@ -67,7 +73,7 @@ Read [Privacy and data](docs/PRIVACY.md). Never put an API token in a commit, sc
 
 ## Known limitations
 
-- Windows installer/portable output is unsigned and still needs a real Windows build + end-to-end test.
+- Windows outputs are unsigned and can trigger Microsoft Defender SmartScreen. CI exercises the unpacked application; interactive installer behavior and use on your own computer still need manual verification.
 - This version does not automatically choose tasks for today or update Notion task completion.
 - Existing developer-install data migration has not been validated.
 - The five mood drawings are static. Four-frame animation is only a design idea, not an implemented feature.
