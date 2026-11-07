@@ -1,11 +1,13 @@
 <div align="center">
 
 # Muse Desktop 🐱
-### A little company. One task at a time.
+### Turn a conversation into your next small step.
 
-A Windows desktop cat, personal task board and 50-minute focus timer.
+A ChatGPT-assisted task companion with a Windows desktop cat, a personal task board and a 50-minute focus timer.
 
-**Add a task. Choose your next step. Start focusing. No account needed.**
+**Manage tasks in conversation. Keep your next steps visible on your desktop.**
+
+Connected workflow: ChatGPT → your Notion → Muse. One-time setup required; full live desktop integration is still under validation. Local tasks work immediately without an account.
 
 [**Download for Windows**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.6.0/Muse-Desktop-Setup-0.6.0-x64.exe) · [**Release notes**](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.6.0) · [**First-time guide**](docs/TRY-MUSE.md)
 
@@ -17,11 +19,27 @@ A Windows desktop cat, personal task board and 50-minute focus timer.
 
 ## Meet Muse
 
-Muse keeps a small, quiet companion on your desktop while you organize your next steps. Add your own tasks, choose up to two for Today, mark them complete, and use a 50-minute focus timer. Your tasks, mood choice and session records stay on your computer.
+Muse is built around a simple idea: **talk through your tasks in ChatGPT, then keep your next steps in view with a small desktop companion.** In connected mode, an explicitly authorized ChatGPT–Notion workflow can create and update tasks in your own Notion workspace. Muse reads those saved tasks into its board, so you can manage the connected task list in conversation instead of repeatedly typing the same changes into another app.
 
-**v0.6.0 makes local tasks the default.** You can use the same app on its own, or optionally connect Notion for a conversation-driven workflow. You do not need separate basic and connected installers. This is an unsigned friend-testing preview, not a stable release.
+Choose up to two tasks for Today, focus for 50 minutes, and keep a gentle cat on your desktop. You can also use the same app entirely on its own: type local tasks, complete or reopen them, choose a mood and keep focus notes, with no account required.
+
+**This is a v0.6.0 friend-testing preview.** The connected workflow requires an initial Notion integration and separate authorization for the chat writer. Assistant-to-Notion writing and readback have been demonstrated; the full live desktop chain and setup in another person's workspace are not yet verified. Muse does not listen to every chat automatically. The app is unsigned and is not a stable release.
 
 The preview image above shows the compact widget with sample tasks. New local-task and optional-sync controls are available in the expanded panel.
+
+## Why conversation-driven task management?
+
+When you already plan your work in ChatGPT, a second round of manual task entry adds friction. Muse's connected workflow is designed to carry the agreed tasks into a desktop view through your Notion workspace.
+
+After the one-time connection, examples of requests to your authorized ChatGPT–Notion writer include:
+
+- “Add a task to review DSP chapter 7.”
+- “Rename that task to include the practice problems.”
+- “Mark the review task complete in Notion.”
+
+Muse refreshes the connected task list on **Sync now** or its roughly 90-second interval. You still choose which tasks appear in Today. Imported tasks are completed in Notion, either through your authorized writer or directly there. Local tasks are completed in Muse.
+
+**Everyday task management can happen in conversation; setup is not automatic.** A working Notion connection, compatible database fields and writer permissions are required. This feature does not add a built-in chatbot or a background listener to Muse. [Connection guide](docs/NOTION-SETUP.md) · [What has actually been tested](docs/INTEGRATION-TEST.md).
 
 ## Two ways to use the same app
 
