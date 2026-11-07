@@ -1,16 +1,20 @@
 # Install Muse Desktop on Windows
 
-## Option A: Download a build from GitHub Actions
+## Option A: Install the public friend-testing preview
 
-1. Open the repository's **Actions** tab.
-2. Select **Build Windows installers** and choose **Run workflow**.
-3. After the workflow succeeds, open its run, then download **Muse-Desktop-Windows-unsigned** under **Artifacts**.
-4. Extract the workflow artifact ZIP. It contains an installer (`Muse-Desktop-Setup-…exe`) and a portable EXE (`Muse-Desktop-Portable-…exe`).
-5. Run the installer. The installer is configured to create Desktop and Start Menu shortcuts. Alternatively, run the portable EXE without an installer.
+1. Open the [v0.5.5 release](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.5.5).
+2. Under **Assets**, download **Muse-Desktop-Setup-0.5.5-x64.exe**. No GitHub account or developer tools are required. Do not choose the Source code ZIP unless you want to develop the app.
+3. Read the unsigned-build notice below and decide whether to run this test build. Complete the installation wizard.
+4. For daily use, open the installed **Muse Desktop** Desktop / Start Menu shortcut. `Setup` is the installer, not the daily launcher. The shortcut should point to `Muse Desktop.exe`.
+5. Connect your own Notion in **Settings**, choose up to two tasks in **All Tasks**, then start a task's clock. [Exact Notion setup](NOTION-SETUP.md).
 
-Version 0.5.5 updates the vulnerable dependencies. CI audits all dependencies and tests the unpacked Windows application, including timer persistence. This does not replace interactive installer testing on your computer.
+For a trial without an installation wizard, choose **Muse-Desktop-Portable-0.5.5-x64.exe** instead.
 
-These builds are **unsigned**. Windows SmartScreen may warn you. Only run software you've built yourself or trust; inspect the source first. Do not disable security protections globally.
+### Windows security prompts
+
+These builds are **unsigned**. Windows SmartScreen may show an unknown publisher or “Windows protected your PC.” Check the exact filename and that it came from this repository's release. If you trust the file and choose to continue testing, **More info → Run anyway** may be offered. Do not disable Windows security protections; stop if the source differs or your organization's policy blocks the app. Any final decision to run an unsigned application is yours.
+
+v0.5.5 passed dependency audit and automated unpacked-Windows application tests. Those checks do not replace manual installer testing or guarantee complete security. The full conversation-to-Notion-to-Muse route is still unvalidated.
 
 ## Option B: Build locally on Windows
 

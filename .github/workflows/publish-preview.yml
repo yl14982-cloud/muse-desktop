@@ -1,0 +1,56 @@
+name: Publish friend-testing preview
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publish-v0.5.5
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BUILD_RUN_ID: '42337004089'
+      SOURCE_SHA: b9ed47a2f18f61b96cbcf02d2feb5998ef4f8491
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Verify the exact successful Windows build
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/actions/runs/$BUILD_RUN_ID" > "$RUNNER_TEMP/muse-build.json"
+          node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/muse-build.json")); if(r.conclusion!=="success" || r.head_sha!==process.env.SOURCE_SHA || r.path!==".github/workflows/windows-build.yml") throw Error("Unexpected build source or status");'
+      - name: Download tested executable artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: Muse-Desktop-Windows-unsigned
+          path: release-assets
+          run-id: ${{ env.BUILD_RUN_ID }}
+          github-token: ${{ github.token }}
+      - name: Validate release filenames and create checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f release-assets/Muse-Desktop-Setup-0.5.5-x64.exe
+          test -f release-assets/Muse-Desktop-Portable-0.5.5-x64.exe
+          test "$(find release-assets -type f | wc -l)" -eq 2
+          cd release-assets
+          sha256sum ./*.exe > SHA256SUMS.txt
+      - name: Publish public pre-release
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt \
+            --target "$SOURCE_SHA" \
+            --title 'Muse Desktop v0.5.5 — Friend-testing preview' \
+            --notes-file docs/releases/v0.5.5.md \
+            --prerelease

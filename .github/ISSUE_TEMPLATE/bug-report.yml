@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a problem while trying Muse Desktop
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Please remove tokens, private Notion IDs, personal task text and private paths before posting. This issue is public."
+  - type: input
+    id: version
+    attributes:
+      label: Muse version and Windows version
+      placeholder: "Muse 0.5.5; Windows 11 x64"
+    validations:
+      required: true
+  - type: dropdown
+    id: edition
+    attributes:
+      label: Edition
+      options:
+        - Installer
+        - Portable
+        - Development source
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include whether this was a fresh install or upgrade.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include exact error text or a redacted screenshot if useful.
+    validations:
+      required: true
+  - type: textarea
+    id: restart
+    attributes:
+      label: Does it happen after restarting Muse?
