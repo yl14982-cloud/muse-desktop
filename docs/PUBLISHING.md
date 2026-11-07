@@ -12,7 +12,7 @@ Run **Actions → Publish friend-testing preview → Run workflow** on `main` on
 
 It verifies the successful source build, downloads the two executables, creates SHA256 checksums, and publishes a GitHub **pre-release** tagged `v0.5.5`. It does not rebuild, sign or modify the executables. It uses only a temporary repository-scoped Actions token; no personal token or signing secret is needed.
 
-If `v0.5.5` already exists, publication stops rather than silently replacing published files. Review the existing release before deciding on a new version. Future releases should update the pinned build run, source commit, version, filenames and release notes after their own successful checks.
+If automatic creation is rejected by GitHub permissions, a maintainer can create the pre-release in the GitHub UI with target commit `b9ed47a2f18f61b96cbcf02d2feb5998ef4f8491`, the notes in `docs/releases/v0.5.5.md`, and no assets, then run the workflow again. The workflow can attach the verified files only to a published pre-release with the exact matching tag commit and zero existing assets. It refuses to replace any previously published assets. Future releases should update the pinned build run, source commit, version, filenames and release notes after their own successful checks.
 
 ## Before promoting a stable release
 

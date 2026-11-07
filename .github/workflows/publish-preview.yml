@@ -49,8 +49,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          gh release create v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt \
-            --target "$SOURCE_SHA" \
-            --title 'Muse Desktop v0.5.5 — Friend-testing preview' \
-            --notes-file docs/releases/v0.5.5.md \
-            --prerelease
+          if gh release view v0.5.5 --json tagName,isPrerelease,isDraft,assets > "$RUNNER_TEMP/muse-release.json" 2>/dev/null; then
+            node -e 'const fs=require("fs"); const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/muse-release.json")); if(r.tagName!=="v0.5.5" || !r.isPrerelease || r.isDraft || r.assets.length!==0) throw Error("Refusing to replace an existing release or assets");'
+            TAG_SHA=$(gh api "repos/$GH_REPO/commits/v0.5.5" --jq .sha)
+            test "$TAG_SHA" = "$SOURCE_SHA"
+            gh release upload v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt
+          else
+            gh release create v0.5.5 release-assets/*.exe release-assets/SHA256SUMS.txt \
+              --target "$SOURCE_SHA" \
+              --title 'Muse Desktop v0.5.5 — Friend-testing preview' \
+              --notes-file docs/releases/v0.5.5.md \
+              --prerelease
+          fi
