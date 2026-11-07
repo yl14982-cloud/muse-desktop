@@ -1,13 +1,13 @@
 <div align="center">
 
 # Muse Desktop 🐱
-### Turn a conversation into your next small step.
+### Talk it through. Choose two. Begin.
 
-A ChatGPT-assisted task companion with a Windows desktop cat, a personal task board and a 50-minute focus timer.
+A desktop study companion that brings your ChatGPT planning conversations closer to the work in front of you.
 
-**Manage tasks in conversation. Keep your next steps visible on your desktop.**
+**Talk through your goals. Keep your next two steps beside you.**
 
-Connected workflow: ChatGPT → your Notion → Muse. One-time setup required; full live desktop integration is still under validation. Local tasks work immediately without an account.
+A small task board, a focus clock and a cat for company. Use it on its own, or connect your ChatGPT–Notion workflow after one-time setup. Connected desktop sync is still under validation.
 
 [**Download for Windows**](https://github.com/yl14982-cloud/muse-desktop/releases/download/v0.6.0/Muse-Desktop-Setup-0.6.0-x64.exe) · [**Release notes**](https://github.com/yl14982-cloud/muse-desktop/releases/tag/v0.6.0) · [**First-time guide**](docs/TRY-MUSE.md)
 
@@ -17,29 +17,79 @@ Connected workflow: ChatGPT → your Notion → Muse. One-time setup required; f
 
 </div>
 
-## Meet Muse
+## Make room for a manageable day
 
-Muse is built around a simple idea: **talk through your tasks in ChatGPT, then keep your next steps in view with a small desktop companion.** In connected mode, an explicitly authorized ChatGPT–Notion workflow can create and update tasks in your own Notion workspace. Muse reads those saved tasks into its board, so you can manage the connected task list in conversation instead of repeatedly typing the same changes into another app.
+You may know what you want to achieve and still struggle to decide where to begin. A course to catch up on, a project to move forward, a long list of unfinished work: each can feel larger when everything asks for your attention at once.
 
-Choose up to two tasks for Today, focus for 50 minutes, and keep a gentle cat on your desktop. You can also use the same app entirely on its own: type local tasks, complete or reopen them, choose a mood and keep focus notes, with no account required.
+Muse starts with a conversation. In ChatGPT, you can talk through the goal, what is getting in the way, how much time you have and how you feel today. Together, you can turn a broad intention into a specific action, then decide which two steps deserve your attention now.
 
-**This is a v0.6.0 friend-testing preview.** The connected workflow requires an initial Notion integration and separate authorization for the chat writer. Assistant-to-Notion writing and readback have been demonstrated; the full live desktop chain and setup in another person's workspace are not yet verified. Muse does not listen to every chat automatically. The app is unsigned and is not a stable release.
+**Muse gives those next steps a small, visible place on your desktop.** The rest of your task list stays in All Tasks. The two-task view is designed to make the day feel more approachable and give you a clear place to return when your attention drifts.
 
-The preview image above shows the compact widget with sample tasks. New local-task and optional-sync controls are available in the expanded panel.
+A little cat stays nearby. A clock helps you make time for the task. Your saved sessions and notes give you something concrete to reflect on afterward.
 
-## Why conversation-driven task management?
+## From “I need to do everything” to a next step
 
-When you already plan your work in ChatGPT, a second round of manual task entry adds friction. Muse's connected workflow is designed to carry the agreed tasks into a desktop view through your Notion workspace.
+### Talk through the goal before filling the board
 
-After the one-time connection, examples of requests to your authorized ChatGPT–Notion writer include:
+A useful plan often begins with questions: What would finishing look like? What do I already understand? What can I realistically do in the time available?
 
-- “Add a task to review DSP chapter 7.”
-- “Rename that task to include the practice problems.”
-- “Mark the review task complete in Notion.”
+Use ChatGPT to explore those questions, break the goal into concrete actions and identify a stopping point. For example, “prepare for the exam” might become “solve three practice problems and explain one mistake in my own words.” A task like that gives you a clear way to start and check what you accomplished.
 
-Muse refreshes the connected task list on **Sync now** or its roughly 90-second interval. You still choose which tasks appear in Today. Imported tasks are completed in Notion, either through your authorized writer or directly there. Local tasks are completed in Muse.
+In the optional connected workflow, an explicitly authorized ChatGPT–Notion writer can save the agreed tasks to your own Notion workspace. Muse then reads them into All Tasks, where you select up to two for Today. This carries the plan from conversation to a desktop view with less repeated task entry.
 
-**Everyday task management can happen in conversation; setup is not automatic.** A working Notion connection, compatible database fields and writer permissions are required. This feature does not add a built-in chatbot or a background listener to Muse. [Connection guide](docs/NOTION-SETUP.md) · [What has actually been tested](docs/INTEGRATION-TEST.md).
+### Choose today's priorities with today's capacity in mind
+
+Your best next step can change with the day. In a check-in with ChatGPT, you can consider deadlines, importance, available time, energy and the work already done. Use that conversation to choose what matters most now, rather than trying to fit the entire backlog into Today.
+
+Muse keeps **up to two chosen tasks** in the compact widget. You make the final selection; the app does not automatically rank or replace your tasks. The aim is a smaller field of attention and less repeated deciding about what to do next.
+
+### Let your state help you choose a way to study
+
+Muse can show **Focused**, **Calm**, **A bit tired**, **Low energy** or **Stressed**. Choose the state yourself, or read an explicitly saved state from Notion when connected. The cat and short caption make that check-in visible.
+
+You can use the state as a prompt for a further conversation with ChatGPT:
+
+| How today feels | A study approach you might discuss |
+| --- | --- |
+| Focused | Protect a block for a demanding problem or active recall. |
+| Calm | Continue at a steady pace with one clear stopping point. |
+| A bit tired | Try a smaller exercise, a short review, or studying alongside someone. |
+| Low energy | Consider a pause, then choose one modest action if you feel ready. |
+| Stressed | Talk through what feels urgent, narrow the next step and decide what can wait. |
+
+These are conversation prompts and possible approaches, not automatic app interventions. ChatGPT can help you reflect on what supports you, including when to persist with a manageable step and when to adjust the plan. Muse currently displays the chosen mood and its built-in caption; it does not detect your feelings or select a study strategy for you.
+
+### Give effort a time and a record
+
+Start a **50-minute focus cycle** for a selected unfinished task. Pause when you need to, resume when ready, and optionally write a session goal, a check-in or a review. Paused time is excluded. Reset saves elapsed focus time into your local history.
+
+The Progress view shows today's recorded focus time and recent sessions. It can help you look back at the work you made time for and what you learned. The timer records elapsed focus-session time; it does not verify attention or automatically mark a task complete.
+
+### Keep a little company while you work
+
+Muse's pastel cat sits alongside your chosen tasks and reflects the mood you share. It is a small, gentle presence while you study, with a compact widget, an expanded panel and a system-tray option. You can keep it close without keeping a full planning window in front of you.
+
+## The idea that connects it all
+
+**A conversation helps you understand the work. Two visible tasks help you begin. A clock and a companion stay with you while you do it.**
+
+The distinctive workflow Muse is exploring brings together goal clarification, task breakdown, daily reflection and a desktop view of the next steps you chose. ChatGPT supplies the conversation; your authorized Notion connection carries the agreed tasks and state; Muse provides the board, cat and focus-session record.
+
+Once that connection is configured, you can ask your ChatGPT–Notion writer to create or update connected tasks in conversation. You still choose Today tasks in Muse, and imported tasks remain read-only there. You can also skip the connection entirely and manage local tasks inside Muse.
+
+**Current integration status:** assistant-to-Notion writing and readback have been demonstrated in the creator's workspace. The complete live desktop chain and setup in another person's workspace are still under validation. This preview needs one-time Notion setup and separate writer authorization; it does not monitor all conversations or turn an arbitrary document into an app update. [Setup guide](docs/NOTION-SETUP.md) · [Integration test status](docs/INTEGRATION-TEST.md).
+
+## Project & Progress: the longer view
+
+The wider product direction is to connect a larger goal, its concrete tasks, today's priorities and a record of progress. Here is the boundary of the current release:
+
+| Area | Available in v0.6.0 | Product direction |
+| --- | --- | --- |
+| Daily tasks | Add local tasks; select up to two; complete and reopen local tasks; optionally read Notion tasks. | A clearer link between the tasks and the larger goal they serve. |
+| Progress | Today's recorded focus time, recent local sessions and optional goal / check-in / review notes. | Longer-term summaries across days and projects. |
+| Projects | The menu entry is a placeholder; project grouping and project-level tracking are not implemented. | Group related tasks under a goal, break it into milestones and review progress over time. |
+
+**Muse v0.6.0 is an unsigned friend-testing preview.** The focus is to make the local board useful now while testing the connected workflow carefully. The image above shows the compact widget with sample tasks; local-task and optional-sync controls are in the expanded panel.
 
 ## Two ways to use the same app
 
